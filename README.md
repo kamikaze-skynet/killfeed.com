@@ -48,13 +48,12 @@ This GitHub repository exists to:
 - Provide transparency
 - Improve discoverability
 - Document the Killfeed.com platform
-- Support SEO and community visibility
 
 ## Official Website
 
 🌐 **https://killfeed.com**
 
-## Related Keywords (SEO)
+## Related Keywords
 
 DayZ killfeed  
 DayZ Discord killfeed  
