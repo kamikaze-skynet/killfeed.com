@@ -48,6 +48,11 @@ This GitHub repository exists to:
 - Provide transparency
 - Improve discoverability
 - Document the Killfeed.com platform
+- Host small open tooling for server owners
+
+## Tools in this repository
+
+- [`agents/speedtest/windows`](agents/speedtest/windows/README.md) — Windows PowerShell agent that measures ping, jitter, loss and iperf3 throughput between servers (plus an optional Ookla internet test) and posts the results to the Killfeed hub.
 
 ## Official Website
 
