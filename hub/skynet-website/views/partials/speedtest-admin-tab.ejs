@@ -1,0 +1,244 @@
+<!-- Speedtest Tab: server-to-server network quality reported by the speedtest agents -->
+
+<!-- Stats Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+  <div class="stat-card monitors p-5">
+    <div class="flex items-center gap-4 mb-4">
+      <div class="stat-icon"><i class="fas fa-network-wired"></i></div>
+      <div class="flex-1">
+        <div class="text-xs text-gray-400 uppercase tracking-wide font-semibold mb-1">Links</div>
+        <div id="st-stat-links" class="text-2xl font-bold text-white">0</div>
+      </div>
+    </div>
+    <div class="text-xs text-gray-500 border-t border-slate-700/50 pt-3">
+      <i class="fas fa-server mr-1"></i> <span id="st-stat-servers">0</span> reporting servers
+    </div>
+  </div>
+
+  <div class="stat-card online p-5">
+    <div class="flex items-center gap-4 mb-4">
+      <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+      <div class="flex-1">
+        <div class="text-xs text-gray-400 uppercase tracking-wide font-semibold mb-1">Healthy</div>
+        <div id="st-stat-healthy" class="text-2xl font-bold text-white">0</div>
+      </div>
+    </div>
+    <div class="text-xs text-green-400/70 border-t border-slate-700/50 pt-3">
+      <i class="fas fa-arrow-up mr-1"></i> No loss, no errors
+    </div>
+  </div>
+
+  <div class="stat-card issues p-5">
+    <div class="flex items-center gap-4 mb-4">
+      <div class="stat-icon"><i class="fas fa-exclamation-triangle"></i></div>
+      <div class="flex-1">
+        <div class="text-xs text-gray-400 uppercase tracking-wide font-semibold mb-1">Issues</div>
+        <div id="st-stat-issues" class="text-2xl font-bold text-white">0</div>
+      </div>
+    </div>
+    <div class="text-xs text-red-400/70 border-t border-slate-700/50 pt-3">
+      <span id="st-stat-degraded" class="text-yellow-400 font-semibold">0</span> degraded ·
+      <span id="st-stat-down" class="text-red-400 font-semibold">0</span> down ·
+      <span id="st-stat-stale" class="text-gray-400 font-semibold">0</span> stale
+    </div>
+  </div>
+
+  <div class="stat-card uptime p-5">
+    <div class="flex items-center gap-4 mb-4">
+      <div class="stat-icon"><i class="fas fa-satellite-dish"></i></div>
+      <div class="flex-1">
+        <div class="text-xs text-gray-400 uppercase tracking-wide font-semibold mb-1">Agents Online</div>
+        <div id="st-stat-agents" class="text-2xl font-bold text-white">0 / 0</div>
+      </div>
+      <span id="st-stat-agents-dot" class="status-dot online"></span>
+    </div>
+    <div class="text-xs text-blue-400/70 border-t border-slate-700/50 pt-3">
+      <i class="fas fa-clock mr-1"></i> <span id="st-stat-results-24h">0</span> results in 24h
+    </div>
+  </div>
+</div>
+
+<!-- Links Matrix -->
+<div class="dashboard-card p-6 mb-6">
+  <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-4">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center">
+        <i class="fas fa-project-diagram text-purple-400"></i>
+      </div>
+      <div>
+        <h2 class="text-lg font-bold text-white">Latest per link</h2>
+        <p class="text-xs text-gray-400">Newest measurement from each server to each target. Click a row to chart it.</p>
+      </div>
+    </div>
+    <div class="flex items-center gap-2">
+      <select id="st-filter-server" onchange="renderSpeedtestLinks()" class="bg-slate-800 border border-slate-600 text-white text-xs rounded-lg px-2 py-1">
+        <option value="">All servers</option>
+      </select>
+      <button onclick="loadSpeedtestOverview()" class="action-btn bg-slate-700 hover:bg-slate-600 text-white border border-slate-600 text-sm">
+        <i class="fas fa-sync"></i><span>Refresh</span>
+      </button>
+    </div>
+  </div>
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="text-left text-xs text-gray-400 uppercase tracking-wide border-b border-slate-700/50">
+          <th class="py-2 pr-3">Status</th>
+          <th class="py-2 pr-3">Server</th>
+          <th class="py-2 pr-3">Target</th>
+          <th class="py-2 pr-3 text-right">Ping</th>
+          <th class="py-2 pr-3 text-right">Jitter</th>
+          <th class="py-2 pr-3 text-right">Loss</th>
+          <th class="py-2 pr-3 text-right">Down</th>
+          <th class="py-2 pr-3 text-right">Up</th>
+          <th class="py-2 pr-3">Age</th>
+          <th class="py-2">Error</th>
+        </tr>
+      </thead>
+      <tbody id="st-links-body">
+        <tr><td colspan="10" class="py-6 text-center text-gray-500">Loading…</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- History Charts -->
+<div class="dashboard-card p-6 mb-6">
+  <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-4">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center">
+        <i class="fas fa-chart-line text-blue-400"></i>
+      </div>
+      <div>
+        <h2 class="text-lg font-bold text-white">History</h2>
+        <p id="st-history-title" class="text-xs text-gray-400">Select a link</p>
+      </div>
+    </div>
+    <div class="flex items-center gap-2">
+      <select id="st-history-link" onchange="loadSpeedtestHistory()" class="bg-slate-800 border border-slate-600 text-white text-xs rounded-lg px-2 py-1">
+        <option value="">Select link…</option>
+      </select>
+      <select id="st-history-hours" onchange="loadSpeedtestHistory()" class="bg-slate-800 border border-slate-600 text-white text-xs rounded-lg px-2 py-1">
+        <option value="6">6h</option>
+        <option value="24" selected>24h</option>
+        <option value="72">3d</option>
+        <option value="168">7d</option>
+        <option value="720">30d</option>
+      </select>
+    </div>
+  </div>
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+    <div>
+      <div class="text-xs text-gray-400 uppercase tracking-wide font-semibold mb-2">Latency (ms) &amp; loss (%)</div>
+      <div class="relative h-64"><canvas id="st-chart-latency"></canvas></div>
+    </div>
+    <div>
+      <div class="text-xs text-gray-400 uppercase tracking-wide font-semibold mb-2">Throughput (Mbps)</div>
+      <div class="relative h-64"><canvas id="st-chart-throughput"></canvas></div>
+    </div>
+  </div>
+</div>
+
+<!-- Agents -->
+<div class="dashboard-card p-6 mb-6">
+  <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-4">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-xl bg-green-500/20 flex items-center justify-center">
+        <i class="fas fa-satellite-dish text-green-400"></i>
+      </div>
+      <div>
+        <h2 class="text-lg font-bold text-white">Agents</h2>
+        <p class="text-xs text-gray-400">Each game host runs one agent. Tokens are shown once when created or rotated.</p>
+      </div>
+    </div>
+    <form onsubmit="createSpeedtestAgent(event)" class="flex items-center gap-2">
+      <input id="st-agent-name" type="text" placeholder="Agent name (e.g. dayz-eu-1)" maxlength="64" required
+             class="bg-slate-800 border border-slate-600 text-white text-sm rounded-lg px-3 py-1.5 w-56" />
+      <button type="submit" class="action-btn bg-gradient-to-r from-green-600 to-green-700 hover:from-green-500 hover:to-green-600 text-white text-sm">
+        <i class="fas fa-plus"></i><span>Add agent</span>
+      </button>
+    </form>
+  </div>
+  <div id="st-token-reveal" class="hidden mb-4 p-4 rounded-lg bg-yellow-500/10 border border-yellow-500/30">
+    <div class="flex items-start gap-3">
+      <i class="fas fa-key text-yellow-400 mt-1"></i>
+      <div class="flex-1 min-w-0">
+        <div class="text-sm font-semibold text-yellow-300 mb-1">Token for <span id="st-token-agent"></span> — copy it now, it will not be shown again</div>
+        <div class="flex items-center gap-2">
+          <code id="st-token-value" class="flex-1 min-w-0 truncate bg-slate-900 text-green-300 text-xs px-3 py-2 rounded"></code>
+          <button onclick="copySpeedtestToken()" class="action-btn bg-slate-700 hover:bg-slate-600 text-white text-xs"><i class="fas fa-copy"></i><span>Copy</span></button>
+          <button onclick="hideSpeedtestToken()" class="action-btn bg-slate-700 hover:bg-slate-600 text-white text-xs"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="text-xs text-gray-400 mt-2">Put it in the agent's <code>speedtest-agent.json</code> as <code>AgentToken</code>, with <code>HubUrl</code> set to this site's URL.</div>
+      </div>
+    </div>
+  </div>
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="text-left text-xs text-gray-400 uppercase tracking-wide border-b border-slate-700/50">
+          <th class="py-2 pr-3">Agent</th>
+          <th class="py-2 pr-3">Token</th>
+          <th class="py-2 pr-3">Status</th>
+          <th class="py-2 pr-3">Last seen</th>
+          <th class="py-2 pr-3">From</th>
+          <th class="py-2 pr-3 text-right">Results</th>
+          <th class="py-2 text-right">Actions</th>
+        </tr>
+      </thead>
+      <tbody id="st-agents-body">
+        <tr><td colspan="7" class="py-6 text-center text-gray-500">Loading…</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Recent Results -->
+<div class="dashboard-card p-6">
+  <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-4">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-xl bg-slate-500/20 flex items-center justify-center">
+        <i class="fas fa-list text-slate-300"></i>
+      </div>
+      <div>
+        <h2 class="text-lg font-bold text-white">Recent results</h2>
+        <p class="text-xs text-gray-400">Raw rows as posted by the agents</p>
+      </div>
+    </div>
+    <div class="flex items-center gap-2">
+      <label class="flex items-center gap-2 text-xs text-gray-300">
+        <input id="st-results-errors" type="checkbox" onchange="loadSpeedtestResults()" class="rounded" /> Errors only
+      </label>
+      <select id="st-results-limit" onchange="loadSpeedtestResults()" class="bg-slate-800 border border-slate-600 text-white text-xs rounded-lg px-2 py-1">
+        <option value="50">50</option>
+        <option value="100" selected>100</option>
+        <option value="250">250</option>
+      </select>
+      <button onclick="cleanupSpeedtestResults()" class="action-btn bg-red-600/80 hover:bg-red-600 text-white text-sm">
+        <i class="fas fa-broom"></i><span>Delete older than</span>
+      </button>
+      <input id="st-cleanup-days" type="number" min="1" max="3650" value="30" class="bg-slate-800 border border-slate-600 text-white text-xs rounded-lg px-2 py-1 w-16" />
+      <span class="text-xs text-gray-400">days</span>
+    </div>
+  </div>
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="text-left text-xs text-gray-400 uppercase tracking-wide border-b border-slate-700/50">
+          <th class="py-2 pr-3">Time</th>
+          <th class="py-2 pr-3">Server</th>
+          <th class="py-2 pr-3">Target</th>
+          <th class="py-2 pr-3 text-right">Ping</th>
+          <th class="py-2 pr-3 text-right">Jitter</th>
+          <th class="py-2 pr-3 text-right">Loss</th>
+          <th class="py-2 pr-3 text-right">Down</th>
+          <th class="py-2 pr-3 text-right">Up</th>
+          <th class="py-2">Error</th>
+        </tr>
+      </thead>
+      <tbody id="st-results-body">
+        <tr><td colspan="9" class="py-6 text-center text-gray-500">Loading…</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -27,11 +27,14 @@ sudo mkdir -p /opt/killfeed/speedtest-agent
 sudo cp speedtest-agent.sh /opt/killfeed/speedtest-agent/
 sudo cp speedtest-agent.example.json /opt/killfeed/speedtest-agent/speedtest-agent.json
 sudo chmod 600 /opt/killfeed/speedtest-agent/speedtest-agent.json   # holds the agent token
-sudo nano /opt/killfeed/speedtest-agent/speedtest-agent.json        # HubUrl, AgentToken, ServerName, Targets
+sudo nano /opt/killfeed/speedtest-agent/speedtest-agent.json        # HubUrl (website URL), AgentToken, ServerName, Targets
 sudo /opt/killfeed/speedtest-agent/speedtest-agent.sh               # run once by hand
 ```
 
-You should see one line per target and `posted N result(s) to <hub>`.
+The token comes from the SkyNet website Admin Panel: **Speedtest → Agents → Add
+agent** (see [`hub/skynet-website`](../../../hub/skynet-website/README.md)).
+You should see one line per target and `posted N result(s) to <hub>`, and the
+agent shows **Online** in the admin panel.
 
 ## Config
 
@@ -68,7 +71,7 @@ schedule outside peak hours if the host is serving players.
 
 ## Payload and exit codes
 
-Same as the Windows agent: a JSON array POSTed to `{HubUrl}/api/results` with a
+Same as the Windows agent: a JSON array POSTed to `{HubUrl}/api/speedtest/results` with a
 bearer token, see the [payload example](../windows/README.md#payload).
 
 | code | meaning                                    |

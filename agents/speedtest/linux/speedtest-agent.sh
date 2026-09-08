@@ -134,7 +134,7 @@ fi
 ((${#RESULTS[@]})) || { echo "nothing to post"; exit 0; }
 
 BODY="$(printf '%s\n' "${RESULTS[@]}" | jq -cs .)"
-if resp="$(curl -sS --fail-with-body --max-time 30 -X POST "$HUB/api/results" \
+if resp="$(curl -sS --fail-with-body --max-time 30 -X POST "$HUB/api/speedtest/results" \
         -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json; charset=utf-8" \
         --data-binary "$BODY" 2>&1)"; then
     echo "posted ${#RESULTS[@]} result(s) to $HUB"

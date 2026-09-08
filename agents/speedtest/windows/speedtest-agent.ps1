@@ -120,7 +120,7 @@ if (-not $results.Count) { Write-Host "nothing to post"; exit 0 }
 
 $body = ConvertTo-Json -InputObject @($results) -Depth 5 -Compress
 try {
-    Invoke-RestMethod -Method Post -Uri "$hub/api/results" -ContentType "application/json; charset=utf-8" `
+    Invoke-RestMethod -Method Post -Uri "$hub/api/speedtest/results" -ContentType "application/json; charset=utf-8" `
         -Headers @{ Authorization = "Bearer $token" } -Body ([System.Text.Encoding]::UTF8.GetBytes($body)) | Out-Null
     Write-Host "posted $($results.Count) result(s) to $hub"
 } catch { Write-Host "POST failed: $_"; exit 1 }

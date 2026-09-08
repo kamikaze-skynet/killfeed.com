@@ -37,22 +37,27 @@ Works on Windows PowerShell 5.1 and PowerShell 7+.
    `speedtest.exe` is on `PATH`.
 4. Every target must run an iperf3 server: `iperf3 -s -p 5201` (open the port in
    the firewall for the agent hosts only).
-5. Copy `speedtest-agent.example.json` to `speedtest-agent.json` and fill in
-   `HubUrl`, `AgentToken`, `ServerName` and `Targets`.
-6. Test it once by hand:
+5. In the SkyNet website Admin Panel open **Speedtest → Agents**, add an agent named
+   after this host and copy its token (shown once). See
+   [`hub/skynet-website`](../../../hub/skynet-website/README.md) if the tab is not
+   installed yet.
+6. Copy `speedtest-agent.example.json` to `speedtest-agent.json` and fill in
+   `HubUrl` (the website URL), `AgentToken`, `ServerName` and `Targets`.
+7. Test it once by hand:
 
    ```powershell
    powershell -NoProfile -ExecutionPolicy Bypass -File C:\killfeed\speedtest-agent\speedtest-agent.ps1
    ```
 
-   You should see one line per target and `posted N result(s) to <hub>`.
+   You should see one line per target and `posted N result(s) to <hub>`, and the
+   agent shows **Online** in the admin panel.
 
 ## Config
 
 | key            | required | default                        | meaning                                   |
 |----------------|----------|--------------------------------|-------------------------------------------|
-| `HubUrl`       | yes      |                                | hub base URL, results go to `/api/results` |
-| `AgentToken`   | yes      |                                | bearer token for this agent               |
+| `HubUrl`       | yes      |                                | SkyNet website base URL (e.g. `https://dayzskynet.com`); results go to `/api/speedtest/results` |
+| `AgentToken`   | yes      |                                | token from Admin Panel → Speedtest → Agents → Add agent |
 | `ServerName`   | no       | `$env:COMPUTERNAME`            | name reported as `server`                 |
 | `Iperf3Path`   | no       | `<script dir>\iperf3\iperf3.exe` | path to `iperf3.exe`                    |
 | `IperfSecs`    | no       | `10`                           | seconds per iperf3 run (one per direction) |
@@ -79,7 +84,7 @@ the host is serving players.
 
 ## Payload
 
-The agent POSTs a JSON array to `POST {HubUrl}/api/results` with
+The agent POSTs a JSON array to `POST {HubUrl}/api/speedtest/results` with
 `Authorization: Bearer {AgentToken}`:
 
 ```json

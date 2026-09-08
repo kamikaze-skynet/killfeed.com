@@ -54,6 +54,7 @@ This GitHub repository exists to:
 
 - [`agents/speedtest/windows`](agents/speedtest/windows/README.md) — Windows PowerShell agent that measures ping, jitter, loss and iperf3 throughput between servers (plus an optional Ookla internet test) and posts the results to the Killfeed hub.
 - [`agents/speedtest/linux`](agents/speedtest/linux/README.md) — the same agent for Linux hosts (bash + jq + curl), with systemd timer units. Both share one config format and payload.
+- [`hub/skynet-website`](hub/skynet-website/README.md) — the receiving side: a **Speedtest** tab for the SkyNet website admin panel that stores agent results in MySQL, manages agent tokens, and charts latency, loss and throughput per link.
 
 ## Official Website
 

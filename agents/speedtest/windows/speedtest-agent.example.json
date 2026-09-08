@@ -1,6 +1,6 @@
 {
-  "HubUrl": "https://hub.example.com",
-  "AgentToken": "replace-with-agent-token",
+  "HubUrl": "https://dayzskynet.com",
+  "AgentToken": "kfst_paste-token-from-admin-panel",
   "ServerName": "dayz-eu-1",
   "Iperf3Path": "C:\\killfeed\\speedtest-agent\\iperf3\\iperf3.exe",
   "IperfSecs": 10,
