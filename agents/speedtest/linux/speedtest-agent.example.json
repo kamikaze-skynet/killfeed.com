@@ -1,0 +1,13 @@
+{
+  "HubUrl": "https://hub.example.com",
+  "AgentToken": "replace-with-agent-token",
+  "ServerName": "dayz-eu-1",
+  "Iperf3Path": "/usr/bin/iperf3",
+  "IperfSecs": 10,
+  "PingCount": 20,
+  "InternetTest": true,
+  "Targets": [
+    { "Name": "dayz-us-1", "Host": "10.0.1.10", "Port": 5201 },
+    { "Name": "dayz-eu-2", "Host": "10.0.2.10" }
+  ]
+}
