@@ -56,6 +56,13 @@ This GitHub repository exists to:
 - [`agents/speedtest/linux`](agents/speedtest/linux/README.md) — the same agent for Linux hosts (bash + jq + curl), with systemd timer units. Both share one config format and payload.
 - [`hub/skynet-website`](hub/skynet-website/README.md) — the receiving side: a **Speedtest** tab for the SkyNet website admin panel that stores agent results in MySQL, manages agent tokens, and charts latency, loss and throughput per link.
 
+## Feature guides
+
+Server-owner guides for features that ship with the SkyNet Killfeed bot and dashboard:
+
+- [Self-service whitelist panel](docs/whitelist-panel.md) — a button panel per server; players enter their gamertag in a pop-up and are added to the Nitrado whitelist.
+- [Map control](docs/map-control.md) — switch between Chernarus, Livonia and Sakhal with `/map change` or the dashboard **Map** tab, gated by Discord roles you choose.
+
 ## Official Website
 
 🌐 **https://killfeed.com**
